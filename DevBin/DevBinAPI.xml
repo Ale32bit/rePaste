@@ -520,5 +520,17 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
+        <member name="T:DevBin.Migrations.Initial">
+            <inheritdoc />
+        </member>
+        <member name="M:DevBin.Migrations.Initial.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:DevBin.Migrations.Initial.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:DevBin.Migrations.Initial.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>

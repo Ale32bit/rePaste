@@ -3,6 +3,7 @@
 @using Microsoft.Extensions.Options
 @inject IStringLocalizer<_Shared> Shared
 @inject IOptions<RequestLocalizationOptions> LocOptions
+@inject IConfiguration Configuration
 
 @{
     var countryCodes = new Dictionary<string, string>()
@@ -37,7 +38,7 @@
     }
     else
     {
-        <title>@ViewData["Title"] - @Shared["DevBin"]</title>
+        <title>@ViewData["Title"] - @Configuration["Title:Name"]</title>
     }
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
@@ -60,7 +61,7 @@
     <link rel="icon" href="/res/dark.png" type="image/png">
 
     @{
-        var metaTitle = ViewData["FullTitle"] ?? (ViewData["Title"] + " - " + Shared["DevBin"]);
+        var metaTitle = ViewData["FullTitle"] ?? (ViewData["Title"] + " - " + Configuration["Title:Name"]);
         var metaDescription = ViewData["MetaDescription"] ?? Shared["Meta.Description"];
         var req = Context.Request;
         var baseUrl = $"{req.Scheme}://{req.Host.Host}";
@@ -97,33 +98,14 @@
             <div class="container">
                 <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                     <a class="d-flex align-items-center mb-2 mb-lg-0 text-decoration-none me-3" href="/">
-                        <img src="/brand.svg" class="bi me-2" height="28" alt="DevBin" role="img">
                         <h3 class="d-inline-block align-middle">
-                            @Shared["DevBin"]<span class="fs-5 text-muted">@Shared[".dev"]</span>
+                            @Configuration["Title:Main"]<span class="text-muted">@Configuration["Title:Sub"]</span>
                         </h3>
                     </a>
 
                     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                        <li>
-                            <a asp-page="/Index" class="btn me-2" role="button">
-                                <i class="fas fa-plus"></i> @Shared["NavBar.NewPaste"]
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-page="/Latest" class="btn btn-outline me-2" role="button">
-                                <i class="fas fa-list-ul"></i> @Shared["NavBar.LatestPastes"]
-                            </a>
-                        </li>
                     </ul>
-
-                    <form asp-page="Search" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-2" method="get">
-                        <div class="input-group">
-                            <input name="query" type="search" class="form-control form-control-dark" placeholder="@Shared["NavBar.Search"]" aria-label="Search">
-                            <button class="btn btn-outline" type="submit">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                            </button>
-                        </div>
-                    </form>
+                    
 
                     <partial name="_LoginPartial" />
                 </div>
@@ -149,18 +131,8 @@
                     <h5>@Shared["Footer.Social"]</h5>
                     <ul class="nav flex-column">
                         <li class="nav-item mb-2">
-                            <a href="https://github.com/Ale32bit/DevBin" target="_blank" class="nav-link p-0 text-muted">
+                            <a href="https://github.com/ReconnectedCC/rPaste" target="_blank" class="nav-link p-0 text-muted">
                                 <i class="fa-brands fa-github"></i> GitHub
-                            </a>
-                        </li>
-                        <li class="nav-item mb-2">
-                            <a href="mailto:support@@devbin.dev" target="_blank" class="nav-link p-0 text-muted">
-                                <i class="fa fa-envelope"></i> @Shared["Footer.Support"]
-                            </a>
-                        </li>
-                        <li class="nav-item mb-2">
-                            <a href="https://patreon.com/DevBin" target="_blank" class="nav-link p-0 text-muted">
-                                <i class="fa-brands fa-patreon"></i> @Shared["Footer.BecomePatron"]
                             </a>
                         </li>
                     </ul>
@@ -179,13 +151,11 @@
                     <h5>@Shared["Footer.Developers"]</h5>
                     <ul class="nav flex-column">
                         <li class="nav-item mb-2"><a href="/docs" class="nav-link p-0 text-muted">@Shared["Footer.DeveloperDocs"]</a></li>
-                        <li class="nav-item mb-2"><a href="https://www.craftos-pc.cc/" target="_blank" class="nav-link p-0 text-muted">@Shared["Footer.AdCraftOS-PC"]</a></li>
-                        <li class="nav-item mb-2"><a href="https://github.com/Ale32bit/DevBin" target="_blank" class="nav-link p-0 text-muted">@Shared["Footer.Contribute"]</a></li>
                     </ul>
                 </div>
 
                 <div class="d-flex flex-column flex-sm-row justify-content-between pt-4 mt-4 border-top mb-2">
-                    <p>DevBin &copy; 2020 - @DateTime.Today.Year</p>
+                    <p>rPaste &copy; @DateTime.Today.Year ReconnectedCC</p>
                     <div class="d-flex">
 
                         <div class="btn-group dropup">

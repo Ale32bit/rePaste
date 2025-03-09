@@ -1,6 +1,5 @@
 global using DevBin.Models;
 using AspNetCoreRateLimit;
-using AspNetCoreRateLimit.Redis;
 using DevBin.Data;
 using DevBin.Services.HCaptcha;
 using DevBin.Services.SMTP;
@@ -15,7 +14,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Prometheus;
-using StackExchange.Redis;
 using System.Globalization;
 using System.Reflection;
 
@@ -37,24 +35,24 @@ builder.Configuration
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    var serverVersion = ServerVersion.AutoDetect(connectionString);
-    options.UseMySql(connectionString, serverVersion);
+    options.UseSqlite(connectionString);
     options.UseLazyLoadingProxies();
 });
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
-builder.Services.AddStackExchangeRedisCache(o =>
-{
-    o.Configuration = redisConnectionString;
-    o.InstanceName = "DevBin:";
-});
+// var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
+// builder.Services.AddStackExchangeRedisCache(o =>
+// {
+//     o.Configuration = redisConnectionString;
+//     o.InstanceName = "DevBin:";
+// });
 
 // Rate limit
-builder.Services.AddSingleton<IConnectionMultiplexer>(provider => ConnectionMultiplexer.Connect(redisConnectionString));
+// builder.Services.AddSingleton<IConnectionMultiplexer>(provider => ConnectionMultiplexer.Connect(redisConnectionString));
 builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
 builder.Services.Configure<IpRateLimitPolicies>(builder.Configuration.GetSection("IpRateLimitPolicies"));
-builder.Services.AddRedisRateLimiting();
+// builder.Services.AddRedisRateLimiting();
+builder.Services.AddInMemoryRateLimiting();
 
 
 // Persist logins between restarts
@@ -282,11 +280,11 @@ app.UseSwaggerUI(options =>
 app.Logger.LogInformation("Working directory: {directory}", Environment.CurrentDirectory);
 
 app.Logger.LogInformation("Setting up...");
-using var scope = app.Services.CreateAsyncScope();
+await using var scope = app.Services.CreateAsyncScope();
 var services = scope.ServiceProvider;
 var context = services.GetRequiredService<ApplicationDbContext>();
 
-//await context.Database.EnsureCreatedAsync();
+await context.Database.EnsureCreatedAsync();
 
 var roleManager = services.GetRequiredService<RoleManager<IdentityRole<int>>>();
 if (!await roleManager.RoleExistsAsync("Administrator"))

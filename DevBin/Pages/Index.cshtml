@@ -13,8 +13,7 @@
 @inject IViewLocalizer Localizer
 
 @{
-    /*ViewData["FullTitle"] = "DevBin - Upload and share scripts";*/
-    ViewData["FullTitle"] = Localizer["PageTitle"];
+    ViewData["Title"] = "Upload and share pastes";
 }
 
 @if (Model.Alerts != null)
@@ -26,13 +25,6 @@
         </div>
     }
 
-}
-
-@if (!SignInManager.IsSignedIn(User))
-{
-    <div class="alert alert-dismissible border" role="alert">
-        @Localizer["SignUpSpaceAlert", @Model.MemberSpace]
-    </div>
 }
 
 <form method="post" id="paste-form">
@@ -136,16 +128,6 @@
                     }
                 </div>
             </div>
-
-            <div>
-                <hr />
-                <h4>@Localizer["LatestPastes"]</h4>
-                @foreach (var paste in Model.Latest)
-                {
-                    @await Html.PartialAsync("Partials/PastePartial", paste)
-                }
-            </div>
-
         </div>
     </div>
 </form>

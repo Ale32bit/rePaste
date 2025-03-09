@@ -178,14 +178,14 @@ Unlisted exposure, these pastes won't be listed publicly but can be accessed by 
 Public exposure, these pastes can be seen by everyone and can be found in the /Latest page</comment>
   </data>
   <data name="DevBin" xml:space="preserve">
-    <value>DevBin</value>
+    <value>rPaste</value>
     <comment>DevBin
-The service name, keep as is</comment>
+      The service name, keep as is</comment>
   </data>
   <data name=".dev" xml:space="preserve">
-    <value>.dev</value>
+    <value>Paste</value>
     <comment>.dev
-The TLD of the domain, used as branding in the header bar. Keep as is.</comment>
+      The TLD of the domain, used as branding in the header bar. Keep as is.</comment>
   </data>
   <data name="NativeLanguageName" xml:space="preserve">
     <value>English</value>
