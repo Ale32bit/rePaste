@@ -7,6 +7,8 @@ appsettings.Development.json
 wwwroot/css/
 Configuration/appsettings.json
 
+.idea/
+
 # User-specific files
 *.rsuser
 *.suo
