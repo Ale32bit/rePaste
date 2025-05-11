@@ -279,7 +279,7 @@ await using var scope = app.Services.CreateAsyncScope();
 var services = scope.ServiceProvider;
 var context = services.GetRequiredService<ApplicationDbContext>();
 
-await context.Database.EnsureCreatedAsync();
+await context.Database.MigrateAsync();
 
 var roleManager = services.GetRequiredService<RoleManager<IdentityRole<int>>>();
 if (!await roleManager.RoleExistsAsync("Administrator"))

@@ -73,6 +73,5 @@
   <ItemGroup>
     <Folder Include="Configuration\" />
     <Folder Include="Localization\Areas\Identity\Pages\Account\Manage\" />
-    <Folder Include="Migrations\" />
   </ItemGroup>
 </Project>

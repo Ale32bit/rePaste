@@ -6,7 +6,7 @@ namespace DevBin.Models;
 public class Paste
 {
     public int Id { get; set; }
-    [MaxLength(8)]
+    [MaxLength(16)]
     public string Code { get; set; }
     [MaxLength(255)]
     public string Title { get; set; } = "Unnamed paste";
