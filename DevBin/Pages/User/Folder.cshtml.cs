@@ -34,11 +34,7 @@ namespace DevBin.Pages.User
             if (user == null)
                 return NotFound();
 
-            var userFolders = _context.Folders.Where(q => q.OwnerId == user.Id).AsQueryable();
-
-            Folder = await userFolders
-                .Include(f => f.Owner)
-                .FirstOrDefaultAsync(m => m.Link == folderName);
+            Folder = _context.GetUserFolders(user.Id).FirstOrDefault(q => q.Link == folderName);
 
             if (Folder == null)
                 return NotFound();
@@ -46,7 +42,7 @@ namespace DevBin.Pages.User
             ViewData["Title"] = $"{user.UserName}/{Folder.Name}";
             ViewData["Username"] = user.UserName;
 
-            Pastes = await _context.Pastes.Where(q => q.AuthorId == user.Id && q.FolderId == Folder.Id).OrderByDescending(q => q.DateTime).ToListAsync();
+            Pastes = await _context.GetUserPastes(user.Id).Where(q => q.FolderId == Folder.Id).OrderByDescending(q => q.DateTime).ToListAsync();
 
             var loggedInUser = await _userManager.GetUserAsync(User);
             if (_signInManager.IsSignedIn(User) && user.Id == loggedInUser.Id)

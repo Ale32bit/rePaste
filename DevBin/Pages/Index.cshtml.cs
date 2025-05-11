@@ -186,10 +186,10 @@ namespace DevBin.Pages
             if (!_signInManager.IsSignedIn(User))
                 return Unauthorized();
 
-            if (code == null)
+            if (string.IsNullOrWhiteSpace(code))
                 return NotFound();
 
-            var paste = await _context.Pastes.FirstOrDefaultAsync(q => q.Code == code);
+            var paste = await _context.GetFullPasteAsync(code);
             if (paste == null)
                 return NotFound();
 
@@ -226,10 +226,10 @@ namespace DevBin.Pages
             if (!_signInManager.IsSignedIn(User))
                 return Unauthorized();
 
-            if (code == null)
+            if (string.IsNullOrWhiteSpace(code))
                 return NotFound();
 
-            var paste = await _context.Pastes.FirstOrDefaultAsync(q => q.Code == code);
+            var paste = await _context.GetFullPasteAsync(code);
             if (paste == null)
                 return NotFound();
 
@@ -270,10 +270,10 @@ namespace DevBin.Pages
 
         public async Task<IActionResult> OnGetCloneAsync(string code)
         {
-            if (code == null)
+            if (string.IsNullOrWhiteSpace(code))
                 return NotFound();
 
-            var paste = await _context.Pastes.FirstOrDefaultAsync(q => q.Code == code);
+            var paste = await _context.GetFullPasteAsync(code);
 
             if (paste == null)
                 return NotFound();

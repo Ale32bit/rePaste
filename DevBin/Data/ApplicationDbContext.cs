@@ -19,5 +19,33 @@ namespace DevBin.Data
             : base(options)
         {
         }
+
+        public async Task<Paste?> GetFullPasteAsync(string code)
+        {
+            return await Pastes
+                .Include(q => q.Author)
+                .Include(q => q.Folder)
+                .Include(q => q.Exposure)
+                .Include(q => q.Syntax)
+                .FirstOrDefaultAsync(p => p.Code == code);
+        }
+
+        public IQueryable<Paste> GetUserPastes(int userId)
+        {
+            return Pastes
+                .Include(q => q.Author)
+                .Include(q => q.Folder)
+                .Include(q => q.Exposure)
+                .Include(q => q.Syntax)
+                .Where(p => p.AuthorId == userId);
+        }
+
+        public IQueryable<Folder> GetUserFolders(int userId)
+        {
+            return Folders
+                .Include(q => q.Pastes)
+                .Include(q => q.Owner)
+                .Where(p => p.OwnerId == userId);
+        }
     }
 }

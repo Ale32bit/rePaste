@@ -30,7 +30,7 @@ namespace DevBin.Pages
             if (code == null)
                 return NotFound();
 
-            var paste = await _context.Pastes.FirstOrDefaultAsync(q => q.Code == code);
+            var paste = await _context.GetFullPasteAsync(code);
 
             if (paste == null)
                 return NotFound();

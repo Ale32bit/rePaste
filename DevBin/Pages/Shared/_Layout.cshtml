@@ -131,7 +131,7 @@
                     <h5>@Shared["Footer.Social"]</h5>
                     <ul class="nav flex-column">
                         <li class="nav-item mb-2">
-                            <a href="https://github.com/ReconnectedCC/rPaste" target="_blank" class="nav-link p-0 text-muted">
+                            <a href="https://github.com/Ale32bit/rePaste" target="_blank" class="nav-link p-0 text-muted">
                                 <i class="fa-brands fa-github"></i> GitHub
                             </a>
                         </li>
@@ -143,7 +143,7 @@
                     <ul class="nav flex-column">
                         <li class="nav-item mb-2"><a href="/ToS" class="nav-link p-0 text-muted">@Shared["Footer.ToS"]</a></li>
                         <li class="nav-item mb-2"><a href="/Privacy" class="nav-link p-0 text-muted">@Shared["Footer.PrivacyPolicy"]</a></li>
-                        <li class="nav-item mb-2"><a href="mailto:dmca@@devbin.dev" class="nav-link p-0 text-muted">@Shared["Footer.DMCA"]</a></li>
+                        <li class="nav-item mb-2"><a href="mailto:@Configuration.GetValue("DMCAEmailAddress", "dmca@devbin.dev")" class="nav-link p-0 text-muted">@Shared["Footer.DMCA"]</a></li>
                     </ul>
                 </div>
 
@@ -155,7 +155,7 @@
                 </div>
 
                 <div class="d-flex flex-column flex-sm-row justify-content-between pt-4 mt-4 border-top mb-2">
-                    <p>rPaste &copy; @DateTime.Today.Year ReconnectedCC</p>
+                    <p>@Html.Raw(@Configuration.GetValue("Copyright", "rePaste &copy; 2025 rePaste"))</p>
                     <div class="d-flex">
 
                         <div class="btn-group dropup">

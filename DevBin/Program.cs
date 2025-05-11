@@ -35,8 +35,9 @@ builder.Configuration
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlite(connectionString);
-    options.UseLazyLoadingProxies();
+    var serverVersion = ServerVersion.AutoDetect(connectionString);
+    options.UseMySql(connectionString, serverVersion);
+    //options.UseLazyLoadingProxies();
 });
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -58,7 +59,7 @@ builder.Services.AddInMemoryRateLimiting();
 // Persist logins between restarts
 builder.Services.AddDataProtection()
     .PersistKeysToDbContext<ApplicationDbContext>()
-    .SetApplicationName("DevBin");
+    .SetApplicationName("rePaste");
 
 // Add email sender support
 builder.Services.Configure<SMTPConfig>(builder.Configuration.GetSection("SMTP"));
@@ -142,7 +143,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     var openApiInfo = new OpenApiInfo()
     {
-        Title = "DevBin",
+        Title = "rePaste",
         Version = "v3",
         Description = "This API provides access to the most common features of the service.<br/>" +
         "A developer API token is required and must be put in the request header as \"Authorization\"." +
@@ -152,14 +153,8 @@ builder.Services.AddSwaggerGen(options =>
         License = new()
         {
             Name = "GNU AGPLv3",
-            Url = new("https://github.com/Ale32bit/DevBin/blob/main/LICENSE"),
+            Url = new("https://github.com/Ale32bit/rePaste/blob/main/LICENSE"),
         },
-        Contact = new()
-        {
-            Name = "DevBin Support",
-            Email = "support@devbin.dev",
-        },
-        TermsOfService = new("https://devbin.dev/tos"),
     };
     options.SwaggerDoc("v3", openApiInfo);
 
@@ -267,8 +262,8 @@ if (app.Configuration.GetValue("EnablePrometheus", false))
 app.UseSwagger(c => { c.RouteTemplate = "docs/{documentname}/swagger.json"; });
 app.UseSwaggerUI(options =>
 {
-    options.DocumentTitle = "DevBin";
-    options.SwaggerEndpoint("/docs/v3/swagger.json", "DevBin v3");
+    options.DocumentTitle = "rePaste";
+    options.SwaggerEndpoint("/docs/v3/swagger.json", "rePaste v3");
     options.RoutePrefix = "docs";
     options.HeadContent = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "wwwroot", "swagger", "menu.html"));
     options.InjectStylesheet("/lib/bootstrap/dist/css/bootstrap.css");

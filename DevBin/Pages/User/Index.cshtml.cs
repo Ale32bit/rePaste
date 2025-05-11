@@ -27,15 +27,14 @@ namespace DevBin.Pages.User
         public bool IsOwn { get; set; }
         public async Task<IActionResult> OnGetAsync(string username)
         {
-
             var user = await _userManager.FindByNameAsync(username);
             if (user == null)
                 return NotFound();
 
             ViewData["Username"] = user.UserName;
 
-            var pastes = _context.Pastes.Where(q => q.AuthorId == user.Id && q.FolderId == null);
-            var folders = _context.Folders.Where(q => q.OwnerId == user.Id);
+            var pastes = _context.GetUserPastes(user.Id).Where(q => q.FolderId == null);
+            var folders = _context.GetUserFolders(user.Id);
 
             var loggedInUser = await _userManager.GetUserAsync(User);
             if (_signInManager.IsSignedIn(User) && user.Id == loggedInUser.Id)
@@ -86,8 +85,9 @@ namespace DevBin.Pages.User
         {
             var user = await _userManager.GetUserAsync(User);
             var friendlyFolderName = Folder.GenerateLink(folderName);
+            var folders = _context.GetUserFolders(user.Id);
 
-            if (user.Folders.Any(q => q.Link == friendlyFolderName))
+            if (folders.Any(q => q.Link == friendlyFolderName))
             {
                 return new JsonResult(false);
             }

@@ -43,7 +43,7 @@ namespace DevBin.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            Tokens = user.ApiTokens.ToList();
+            Tokens = _context.ApiTokens.Where(q => q.OwnerId == user.Id).ToList();
 
             return Page();
         }
