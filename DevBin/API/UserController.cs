@@ -3,6 +3,7 @@ using DevBin.Data;
 using DevBin.UserModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DevBin.API;
 
@@ -57,9 +58,8 @@ public class UserController : ControllerBase
         var user = await _userManager.FindByNameAsync(username);
         if (user == null)
             return NotFound();
-
-
-        return user.Pastes.Where(q => q.Exposure.IsListed).Select(x => ResultPaste.From(x)).ToList();
+        
+        return await _context.GetUserPastes(user.Id).Where(q => q.Exposure.IsListed).Select(x => ResultPaste.From(x)).ToListAsync();
     }
 
     /// <summary>
@@ -76,6 +76,6 @@ public class UserController : ControllerBase
         if (user == null)
             return NotFound();
 
-        return user.Folders.Where(q => q.Pastes.Any(x => x.Exposure.IsListed)).Select(x => ResultFolder.From(x)).ToList();
+        return await _context.GetUserFolders(user.Id).Where(q => q.Pastes.Any(x => x.Exposure.IsListed)).Select(x => ResultFolder.From(x)).ToListAsync();
     }
 }

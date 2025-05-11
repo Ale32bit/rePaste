@@ -69,7 +69,7 @@ public class PasteController : ControllerBase
     [RequireApiKey(ApiPermission.Get)]
     public async Task<ActionResult> GetPasteContent(string code)
     {
-        var paste = await _context.Pastes.FirstOrDefaultAsync(q => q.Code == code);
+        var paste = await _context.GetFullPasteAsync(code);
         if (paste == null)
         {
             return NotFound();
@@ -152,7 +152,7 @@ public class PasteController : ControllerBase
     [RequireApiKey(ApiPermission.Update)]
     public async Task<IActionResult> UpdatePaste(string code, UserPaste userPaste)
     {
-        var paste = await _context.Pastes.FirstOrDefaultAsync(q => q.Code == code);
+        var paste = await _context.GetFullPasteAsync(code);
         if (paste == null)
         {
             return NotFound();
@@ -229,7 +229,7 @@ public class PasteController : ControllerBase
     [RequireApiKey(ApiPermission.Delete)]
     public async Task<IActionResult> DeletePaste(string code)
     {
-        var paste = await _context.Pastes.FirstOrDefaultAsync(q => q.Code == code);
+        var paste = await _context.GetFullPasteAsync(code);
         if (paste == null)
         {
             return NotFound();

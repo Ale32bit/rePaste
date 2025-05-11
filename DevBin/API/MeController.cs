@@ -32,7 +32,7 @@ public class MeController : ControllerBase
     public async Task<ActionResult<IEnumerable<ResultPaste>>> GetPastes()
     {
         var user = await _userManager.GetUserAsync(User);
-        return user.Pastes.Select(x => ResultPaste.From(x)).ToList();
+        return await _context.GetUserPastes(user.Id).Select(x => ResultPaste.From(x)).ToListAsync();
     }
 
 
@@ -45,7 +45,7 @@ public class MeController : ControllerBase
     public async Task<ActionResult<IEnumerable<ResultFolder>>> GetFolders()
     {
         var user = await _userManager.GetUserAsync(User);
-        return user.Folders.Select(x => ResultFolder.From(x)).ToList();
+        return await _context.GetUserFolders(user.Id).Select(x => ResultFolder.From(x)).ToListAsync();
     }
 
     /// <summary>
@@ -58,7 +58,7 @@ public class MeController : ControllerBase
     public async Task<ActionResult<ResultFolder>> GetFolder(int id)
     {
         var user = await _userManager.GetUserAsync(User);
-        var folder = user.Folders.FirstOrDefault(q => q.Id == id && q.OwnerId == user.Id);
+        var folder = await _context.GetUserFolders(user.Id).FirstOrDefaultAsync(q => q.Id == id);
         if (folder == null)
             return NotFound();
 
@@ -102,7 +102,7 @@ public class MeController : ControllerBase
     public async Task<ActionResult<ResultFolder>> DeleteFolder(int id)
     {
         var user = await _userManager.GetUserAsync(User);
-        var folder = user.Folders.FirstOrDefault(q => q.Id == id && q.OwnerId == user.Id);
+        var folder = await _context.GetUserFolders(user.Id).FirstOrDefaultAsync(q => q.Id == id);
         if (folder == null)
             return NotFound();
 

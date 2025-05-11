@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
 
 namespace DevBin.Attributes;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
@@ -29,7 +30,9 @@ public class RequireApiKeyFilter : IAsyncAuthorizationFilter
     public async Task OnAuthorizationAsync(AuthorizationFilterContext filterContext)
     {
         var authorizationKey = filterContext.HttpContext.Request.Headers.Authorization.ToString();
-        var token = _context.ApiTokens.FirstOrDefault(q => q.Token == authorizationKey);
+        var token = _context.ApiTokens
+            .Include(q => q.Owner)
+            .FirstOrDefault(q => q.Token == authorizationKey);
         if (token == null)
         {
             filterContext.Result = new UnauthorizedResult();
