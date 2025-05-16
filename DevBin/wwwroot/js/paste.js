@@ -33,7 +33,7 @@ addEventListener('load', () => {
         if(syntax.value === "auto") {
             let syntaxDisplay = document.getElementById("syntax-display");
             let lang = hljs.getLanguage(event.data.syntax);
-            syntaxDisplay.innerText = ": " + lang.name;
+            syntaxDisplay.innerText = lang.name;
         }
         if (event.data.lines <= 4096) {
             displayLineNumbers();

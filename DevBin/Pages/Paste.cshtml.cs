@@ -97,7 +97,7 @@ namespace DevBin.Pages
             if (code == null)
                 return NotFound();
 
-            Paste = await _context.Pastes.FirstOrDefaultAsync(q => q.Code == code);
+            Paste = await _context.GetFullPasteAsync(code);
 
             if (Paste == null)
                 return NotFound();

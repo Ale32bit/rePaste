@@ -17,85 +17,110 @@
 <div class="row justify-content-between my-2">
     @if (Model.Paste.Author != null)
     {
-        <h6 class="m-0"><a asp-page="/User/Index" asp-route-username="@Model.Paste.Author.UserName" class="link">@Model.Paste.Author.UserName</a>/</h6>
+        <h6 class="m-0"><a asp-page="/User/Index" asp-route-username="@Model.Paste.Author.UserName"
+                           class="link">@Model.Paste.Author.UserName</a>/</h6>
     }
     else
     {
         <h6 class="m-0">@Localizer["Guest"]/</h6>
     }
 
-    <div class="col-md-8 col-sm-12">
-        @if (Model.Paste.Folder != null)
-        {
-            <h3 class="fs-4 d-inline text-truncate">
+
+    @if (Model.Paste.Folder != null)
+    {
+        <h3 class="fs-4 d-inline text-truncate">
                 <span class="text-muted user-select-none fs-5">
-                    <a class="link" asp-page="User/Folder" asp-route-folderName="@Model.Paste.Folder.Link" asp-route-username="@Model.Paste.Author?.UserName">@Model.Paste.Folder?.Name</a>
+                    <a class="link" asp-page="User/Folder" asp-route-folderName="@Model.Paste.Folder.Link"
+                       asp-route-username="@Model.Paste.Author?.UserName">@Model.Paste.Folder?.Name</a>
                     /
                 </span>
-                @Model.Paste.Title
-            </h3>
+            @Model.Paste.Title
+        </h3>
+    }
+    else
+    {
+        <h3 class="fs-4 d-inline text-break">@Model.Paste.Title</h3>
+    }
+    <div class="col pt-2">
+        <span
+            class="badge badge-color d-inline">
+            @if (Model.Paste.SyntaxName == "auto")
+            {
+                <i class="fa-solid fa-robot"></i>
+            }
+            else
+            {
+                @Model.Paste.Syntax.DisplayName
+            }
+            <span
+                id="syntax-display"></span>
+        </span>
+        <span class="text-muted d-inline ms-2"
+              title="@Localizer["ContentSize.Hover"]">@Utils.ToIECFormat(Model.Paste.Content.Length)</span>
+        <span class="text-muted d-inline ms-2" title="@Localizer["TotalViews.Hover"]">
+                <i class="fas fa-eye"></i> @Model.Paste.Views</span>
+
+        <span class="text-muted d-inline ms-2" id="creationDate">
+                <i class="fas fa-clock" title="@Localizer["CreationDate.Hover"]"></i> @Model.Paste.DateTime.ToRelative()
+            </span>
+        <input id="creationDateValue" class="d-none" type="hidden" value="@Model.Paste.DateTime.ToString("o")"/>
+
+        @if (Model.Paste.UpdateDatetime.HasValue)
+        {
+            <span class="text-muted d-inline ms-2" id="lastUpdateDate">
+                    <i class="fas fa-edit"
+                       title="@Localizer["LastUpdateDate.Hover"]"></i> @Model.Paste.UpdateDatetime.ToRelative()
+                </span>
+            <input id="lastUpdateDateValue" class="d-none" type="hidden"
+                   value="@Model.Paste.UpdateDatetime?.ToString("o")"/>
+        }
+    </div>
+    <div class="col-sm-12 col-md-auto">
+        <a role="button"
+           class="btn btn-sm btn-outline" title="@Localizer["CopyToClipboard"]"
+           onclick="copyPaste();"><i class="fa-solid fa-clipboard"></i></a>
+
+        <a asp-page-handler="Download" role="button" class="btn btn-sm btn-outline">
+            <i
+                class="fa fa-download" title="@Localizer["Download"]"></i></a>
+
+        <a asp-page="Raw" asp-route-code="@Model.Paste.Code" role="button"
+           class="btn btn-sm btn-outline" title="@Localizer["RawPaste"]"><i class="fas fa-code"></i></a>
+
+        <a asp-page="Index" asp-page-handler="Clone" asp-route-code="@Model.Paste.Code" role="button" type="submit"
+           class="btn btn-sm btn-outline" title="@Localizer["ClonePaste"]"><i class="fas fa-plus"></i></a>
+
+        @if (Model.IsAuthor)
+        {
+            <a asp-page="Index" asp-page-handler="Edit" asp-route-code="@Model.Paste.Code" role="button" type="submit"
+               class="btn btn-sm btn-outline" title="@Localizer["EditPaste"]"><i class="fas fa-edit"></i></a>
+
+            <form method="post" asp-page="Paste" class="d-inline" asp-page-handler="Delete"
+                  asp-route-code="@Model.Paste.Code">
+                <button type="submit" class="btn btn-sm btn-outline-danger"
+                        onclick="return confirm('@Localizer["Delete.Confirm"]')" title="@Localizer["DeletePaste"]">
+                    <i
+                        class="fas fa-trash-alt"></i></button>
+            </form>
         }
         else
         {
-            <h3 class="fs-4 d-inline text-break">@Model.Paste.Title</h3>
+            <a asp-page="Report" asp-route-code="@Model.Paste.Code" role="button"
+               class="btn btn-sm btn-outline-danger" title="@Localizer["Report"]">
+                <i
+                    class="fas fa-exclamation-triangle"></i></a>
         }
-        <div class="pt-2">
-            <span class="badge badge-color d-inline">@(Model.Paste.Syntax.Name == "auto" ? Shared["Syntax.Auto"] : Model.Paste.Syntax.DisplayName)<span id="syntax-display"></span></span>
-            <span class="text-muted d-inline ms-2" title="@Localizer["ContentSize.Hover"]">@Utils.ToIECFormat(Model.Paste.Content.Length)</span>
-            <span class="text-muted d-inline ms-2" title="@Localizer["TotalViews.Hover"]">
-                <i class="fas fa-eye"></i> @Model.Paste.Views
-            </span>
-            
-            <span class="text-muted d-inline ms-2" id="creationDate">
-                <i class="fas fa-clock" title="@Localizer["CreationDate.Hover"]"></i> @Model.Paste.DateTime.ToRelative()
-            </span>
-            <input id="creationDateValue" class="d-none" type="hidden" value="@Model.Paste.DateTime.ToString("o")"/>
-            
-            @if (Model.Paste.UpdateDatetime.HasValue)
-            {
-                <span class="text-muted d-inline ms-2" id="lastUpdateDate">
-                    <i class="fas fa-edit" title="@Localizer["LastUpdateDate.Hover"]"></i> @Model.Paste.UpdateDatetime.ToRelative()
-                </span>
-                <input id="lastUpdateDateValue" class="d-none" type="hidden" value="@Model.Paste.UpdateDatetime?.ToString("o")"/>
-
-            }
-        </div>
     </div>
-
-    <div class="col-md-4 col-sm-12 my-1">
-        <div class="row g-2">
-            <div class="col-md-4 col-sm-12">
-                @if (Model.IsAuthor)
-                {
-                    <a asp-page="Index" asp-page-handler="Edit" asp-route-code="@Model.Paste.Code" role="button" type="submit" class="form-control btn btn-sm btn-outline mt"><i class="fas fa-edit"></i> @Localizer["EditPaste"]</a>
-                    <form method="post" asp-page="Paste" asp-page-handler="Delete" asp-route-code="@Model.Paste.Code">
-                        <button type="submit" class="form-control btn btn-sm btn-outline-danger mt-2" onclick="return confirm('@Localizer["Delete.Confirm"]')"><i class="fas fa-trash-alt"></i> @Localizer["DeletePaste"]</button>
-                    </form>
-                }
-            </div>
-            <div class="col-md-4 col-sm-12">
-                <a asp-page="Raw" asp-route-code="@Model.Paste.Code" role="button" class="form-control btn btn-sm btn-outline"><i class="fas fa-code"></i> @Localizer["RawPaste"]</a>
-                <a asp-page="Index" asp-page-handler="Clone" asp-route-code="@Model.Paste.Code" role="button" type="submit" class="form-control btn btn-sm btn-outline mt-2"><i class="fas fa-plus"></i> @Localizer["ClonePaste"]</a>
-            </div>
-            <div class="col-md-4 col-sm-12">
-                <a asp-page-handler="Download" role="button" class="form-control btn btn-sm btn-outline"><i class="fa fa-download"></i> @Localizer["Download"]</a>
-                <a asp-page="Report" asp-route-code="@Model.Paste.Code" role="button" class="form-control btn btn-sm btn-outline-danger mt-2"><i class="fas fa-exclamation-triangle"></i> @Localizer["Report"]</a>
-            </div>
-        </div>
-    </div>
-
 </div>
+
 <div class="my-2 border rounded-2 position-relative">
-    <button type="button" class="btn btn-sm btn-clipboard" title="@Localizer["CopyToClipboard"]" style="z-index: 999" onclick="copyPaste();">
-        <i class="fa-solid fa-clipboard"></i>
-    </button>
-    @*<pre class="line-numbers" style="overflow:clip;"><code id="paste-content" class="language-@Model.Paste.Syntax.Name">@Model.Paste.Content</code></pre>*@
     <div id="paste-content" class="font-monospace">@pasteContent</div>
 </div>
 
 
 <div class="my-2">
-    <textarea id="paste-copy" wrap="off" class="form-control text-muted font-monospace codeblock" style="overflow: scroll; white-space: pre;">@pasteContent</textarea>
+    <textarea id="paste-copy" wrap="off" class="form-control text-muted font-monospace codeblock"
+              style="overflow: scroll; white-space: pre;">@pasteContent</textarea>
 </div>
 
 <input id="paste-syntax" class="d-none" hidden value="@Model.Paste.Syntax.Name"/>
@@ -104,14 +129,17 @@
 @if (Model.Paste.StringContent.Split("\n").Length > 4096)
 {
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 5">
-        <div id="too-long-alert" class="toast show bg-dark border-light" role="alert" aria-live="assertive" aria-atomic="true">
+        <div id="too-long-alert" class="toast show bg-dark border-light" role="alert" aria-live="assertive"
+             aria-atomic="true">
             <div class="toast-header bg-dark text-warning">
                 <strong class="me-auto">@Localizer["SlowPerformance.Title"]</strong>
             </div>
             <div class="toast-body">
                 <p>@Localizer["SlowPerformance.Text"]</p>
-                <button type="button" class="btn btn-warning btn-sm" onclick="displayLinesAnyway(this);">@Localizer["SlowPerformance.DisplayAnyway"]</button>
-                <button type="button" class="btn btn-secondary btn-sm" onclick="closeAlert();">@Localizer["SlowPerformance.Ignore"]</button>
+                <button type="button" class="btn btn-warning btn-sm"
+                        onclick="displayLinesAnyway(this);">@Localizer["SlowPerformance.DisplayAnyway"]</button>
+                <button type="button" class="btn btn-secondary btn-sm"
+                        onclick="closeAlert();">@Localizer["SlowPerformance.Ignore"]</button>
             </div>
         </div>
     </div>

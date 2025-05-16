@@ -32,6 +32,13 @@
 
         <input id="captcha-token" asp-for="Input.CaptchaToken" type="hidden" />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        
+        
+        <div class="col-12">
+            <div class="mb-3">
+                <input asp-for="Input.Title" type="text" class="form-control border-0 rounded-0 border-bottom fs-5" autocomplete="off" placeholder="@Localizer["Title.Placeholder"]">
+            </div>
+        </div>
 
         <div class="col-sm-12 col-md-8 has-validation">
             <span asp-validation-for="Input.Content" class="text-danger"></span>
@@ -42,26 +49,21 @@
         <div class="col-sm-12 col-md-4">
             <div class="row">
                 <div class="col-6">
-                    <label asp-for="Input.Title" class="form-label">@Localizer["Title"]</label>
-                    <input asp-for="Input.Title" type="text" class="form-control" autocomplete="off" placeholder="@Localizer["Title.Placeholder"]" />
-                    <span asp-validation-for="Input.Title" class="text-danger"></span>
-                </div>
-                <div class="col-6">
                     <label asp-for="Input.SyntaxName" class="form-label" data-live-search="true">@Localizer["Syntax"]</label>
                     <select asp-for="Input.SyntaxName" class="form-select" asp-items="ViewBag.Syntaxes">
                         <option value="auto" selected>@Localizer["Syntax.AutoDetect"]</option>
                     </select>
                     <span asp-validation-for="Input.SyntaxName" class="text-danger"></span>
                 </div>
-            </div>
-
-            <div class="row pt-2">
                 <div class="col-6">
                     <label asp-for="Input.ExposureId" class="form-label">@Localizer["Exposure"]</label>
                     <select asp-for="Input.ExposureId" class="form-select" asp-items="ViewBag.Exposures">
                     </select>
                     <span asp-validation-for="Input.ExposureId" class="text-danger"></span>
                 </div>
+            </div>
+
+            <div class="row pt-2">
                 <div class="col-6">
                     @if (SignInManager.IsSignedIn(User))
                     {
@@ -79,10 +81,35 @@
                         </select>
                     }
                 </div>
+                
+                <div class="col-6">
+                    <label class="form-label">&nbsp;</label>
+
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        if (Model.IsEditing)
+                        {
+                            <button type="submit" class="form-control btn"><i class="fas fa-pen"></i> @Localizer["EditPaste"]</button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="form-control btn"><i class="fas fa-plus"></i> @Localizer["CreatePaste"]</button>
+                        }
+                    }
+                    else
+                    {
+                        <div id="hcaptcha"
+                             class="h-captcha"
+                             data-sitekey="@HCaptcha.SiteKey"
+                             data-callback="onSubmit"
+                             data-size="invisible"></div>
+                        <button class="form-control btn" onclick="validate()"><i class="fas fa-plus"></i> @Localizer["CreatePaste"]</button>
+                    }
+                </div>
             </div>
 
             <div class="row pt-2">
-                <div class="col-6">
+                <div class="col-6 offset-6">
                     <div class="form-check">
                         @if (SignInManager.IsSignedIn(User))
                         {
@@ -103,29 +130,6 @@
                             @Localizer["CreateAsGuest"]
                         </label>
                     </div>
-                </div>
-
-                <div class="col-6">
-                    @if (SignInManager.IsSignedIn(User))
-                    {
-                        if (Model.IsEditing)
-                        {
-                            <button type="submit" class="form-control btn"><i class="fas fa-pen"></i> @Localizer["EditPaste"]</button>
-                        }
-                        else
-                        {
-                            <button type="submit" class="form-control btn"><i class="fas fa-plus"></i> @Localizer["CreatePaste"]</button>
-                        }
-                    }
-                    else
-                    {
-                        <div id="hcaptcha"
-                         class="h-captcha"
-                         data-sitekey="@HCaptcha.SiteKey"
-                         data-callback="onSubmit"
-                         data-size="invisible"></div>
-                        <button class="form-control btn" onclick="validate()"><i class="fas fa-plus"></i> @Localizer["CreatePaste"]</button>
-                    }
                 </div>
             </div>
         </div>
