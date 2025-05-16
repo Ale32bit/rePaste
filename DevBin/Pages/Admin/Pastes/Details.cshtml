@@ -1,0 +1,90 @@
+@page
+@model DevBin.Pages.Admin.Pastes.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Paste</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Paste.Code)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Paste.Code)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Paste.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Paste.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Paste.Views)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Paste.Views)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Paste.DateTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Paste.DateTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Paste.UpdateDatetime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Paste.UpdateDatetime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Paste.Cache)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Paste.Cache)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Paste.UploaderIPAddress)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Paste.UploaderIPAddress)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Paste.ExpireDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Paste.ExpireDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Paste.Syntax)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Paste.Syntax.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Paste.Exposure)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Paste.Exposure.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Paste.Author)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Paste.Author.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Paste.Folder)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Paste.Folder.Id)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>

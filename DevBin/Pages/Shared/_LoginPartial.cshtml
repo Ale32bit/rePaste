@@ -15,6 +15,7 @@
         @if (await UserManager.IsInRoleAsync(user, "Administrator"))
         {
             <a class="btn btn-outline" role="button" asp-page="/Admin/Reports/Index"><i class="fa-solid fa-flag"></i> @Shared["NavBar.Reports"]</a>
+            <a class="btn btn-outline" role="button" asp-page="/Admin/Pastes/Index"><i class="fa-solid fa-list"></i> Pastes</a>
         }
         <span class="dropdown">
             <button class="btn dropdown-toggle" type="button" id="usermenu" data-bs-toggle="dropdown" aria-expanded="false">

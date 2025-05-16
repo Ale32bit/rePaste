@@ -93,11 +93,6 @@ builder.Services.AddDefaultIdentity<ApplicationUser>((IdentityOptions options) =
     .AddRoles<IdentityRole<int>>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddRouting(o =>
-{
-    o.LowercaseUrls = true;
-});
-
 // Resolve /xxxxxxxx to pastes
 builder.Services.AddRazorPages(o =>
 {

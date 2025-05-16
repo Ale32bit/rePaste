@@ -1,0 +1,113 @@
+@page
+@model DevBin.Pages.Admin.Pastes.IndexModel
+
+@{
+    ViewData["Title"] = "Pastes";
+}
+
+<h1>Pastes</h1>
+
+<div>
+    <a href="?page=0">First</a>
+    -
+    <a href="?page=@(Model.CurrentPage - 1)">Prev</a>
+    -
+    <a href="?page=@(Model.CurrentPage + 1)">Next</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Code
+            </th>
+            <th>
+                Title
+            </th>
+            <th>
+                Views
+            </th>
+            <th>
+                Creation datetime
+            </th>
+            <th>
+                Update datetime
+            </th>
+            <th>
+                Snippet
+            </th>
+            <th>
+                Uploader IP address
+            </th>
+            <th>
+                Expiration date
+            </th>
+            <th>
+                Syntax code
+            </th>
+            <th>
+                Exposure ID
+            </th>
+            <th>
+                Author ID
+            </th>
+            <th>
+                Folder ID
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Paste) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Views)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdateDatetime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cache)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UploaderIPAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExpireDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SyntaxName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExposureId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Author.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Folder.Link)
+            </td>
+            <td>
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<div>
+    <a href="?page=0">First</a>
+    -
+    <a href="?page=@(Model.CurrentPage - 1)">Prev</a>
+    -
+    <a href="?page=@(Model.CurrentPage + 1)">Next</a>
+</div>
