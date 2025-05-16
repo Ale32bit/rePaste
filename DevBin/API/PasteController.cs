@@ -45,7 +45,7 @@ public class PasteController : ControllerBase
     [ProducesResponseType(200, Type = typeof(string))]
     public async Task<ActionResult<ResultPaste>> GetPaste(string code)
     {
-        var paste = await _context.Pastes.FirstOrDefaultAsync(q => q.Code == code);
+        var paste = await _context.GetPartialPasteAsync(code);
         if (paste == null)
         {
             return NotFound();
@@ -81,7 +81,7 @@ public class PasteController : ControllerBase
             return NotFound();
         }
 
-        return new FileContentResult(paste.Content, "text/plain");
+        return new FileContentResult(paste.PasteContent.Content, "text/plain");
     }
 
     /// <summary>
@@ -98,12 +98,14 @@ public class PasteController : ControllerBase
 
         if (userPaste.Content.Length == 0)
             return BadRequest("Content cannot be empty.");
+        
+        var pasteContent = await _context.GetOrCreateContentAsync(userPaste.ByteContent);
 
         var paste = new Paste
         {
             Title = userPaste.Title ?? "Unnamed Paste",
             Cache = PasteUtils.GetShortContent(userPaste.Content, 250),
-            Content = userPaste.ByteContent,
+            PasteContent = pasteContent,
             DateTime = DateTime.UtcNow,
             UploaderIPAddress = HttpContext.Connection.RemoteIpAddress.ToString(),
             Views = 0,
@@ -176,8 +178,10 @@ public class PasteController : ControllerBase
 
             if (userPaste.Content.Length == 0)
                 return BadRequest("Content cannot be empty.");
+            
+            var pasteContent = await _context.GetOrCreateContentAsync(userPaste.ByteContent);
 
-            paste.Content = userPaste.ByteContent;
+            paste.PasteContent = pasteContent;
             paste.Cache = PasteUtils.GetShortContent(paste.StringContent, 250);
         }
 

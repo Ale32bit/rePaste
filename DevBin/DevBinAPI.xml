@@ -520,6 +520,20 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
+        <member name="M:DevBin.Data.ApplicationDbContext.GetPartialPasteAsync(System.String)">
+            <summary>
+            Fetch the paste with the given code, skip loading content.
+            </summary>
+            <param name="code">Paste code</param>
+            <returns>Partial paste</returns>
+        </member>
+        <member name="M:DevBin.Data.ApplicationDbContext.GetFullPasteAsync(System.String)">
+            <summary>
+            Fetch the full paste with the given code, including content.
+            </summary>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
         <member name="T:DevBin.Migrations.Initial">
             <inheritdoc />
         </member>
@@ -530,6 +544,30 @@
             <inheritdoc />
         </member>
         <member name="M:DevBin.Migrations.Initial.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:DevBin.Migrations.Contenthashes">
+            <inheritdoc />
+        </member>
+        <member name="M:DevBin.Migrations.Contenthashes.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:DevBin.Migrations.Contenthashes.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:DevBin.Migrations.Contenthashes.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:DevBin.Migrations.RemoveUnusedHashIdColumn">
+            <inheritdoc />
+        </member>
+        <member name="M:DevBin.Migrations.RemoveUnusedHashIdColumn.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:DevBin.Migrations.RemoveUnusedHashIdColumn.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:DevBin.Migrations.RemoveUnusedHashIdColumn.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
     </members>

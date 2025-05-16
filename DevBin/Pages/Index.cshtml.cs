@@ -126,7 +126,7 @@ namespace DevBin.Pages
 
             Input.AsGuest = !_signInManager.IsSignedIn(User) || Input.AsGuest;
 
-            if (Input.Content == null)
+            if (string.IsNullOrEmpty(Input.Content))
             {
                 ModelState.AddModelError("Input.Content", _localizer["Error.Content.Empty"]);
                 return Page();
@@ -144,11 +144,15 @@ namespace DevBin.Pages
                 return Page();
             }
 
+            var content = Encoding.UTF8.GetBytes(Input.Content);
+            var pasteContent = await _context.GetOrCreateContentAsync(content);
+
             var paste = new Paste
             {
                 Title = Input.Title ?? "Unnamed Paste",
                 Cache = PasteUtils.GetShortContent(Input.Content, 250),
-                Content = Encoding.UTF8.GetBytes(Input.Content),
+                //Content = Encoding.UTF8.GetBytes(Input.Content),
+                PasteContent = pasteContent,
                 ExposureId = Input.ExposureId,
                 SyntaxName = Input.SyntaxName,
                 DateTime = DateTime.UtcNow,
@@ -237,7 +241,7 @@ namespace DevBin.Pages
             if (paste.AuthorId != loggedInUser.Id)
                 return Unauthorized();
 
-            if (Input.Content == null)
+            if (string.IsNullOrEmpty(Input.Content))
             {
                 ModelState.AddModelError("Input.Content", _localizer["Error.Content.Empty"]);
                 return Page();
@@ -249,10 +253,13 @@ namespace DevBin.Pages
                 return Page();
             }
 
+            var content = Encoding.UTF8.GetBytes(Input.Content);
+            var pasteContent = await _context.GetOrCreateContentAsync(content);
+            
             paste.Title = Input.Title;
             paste.SyntaxName = Input.SyntaxName;
             paste.ExposureId = Input.ExposureId;
-            paste.Content = Encoding.UTF8.GetBytes(Input.Content);
+            paste.PasteContent = pasteContent;
             if (Input.FolderId != 0)
             {
                 paste.FolderId = Input.FolderId;
